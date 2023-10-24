@@ -27,12 +27,10 @@ int Button_State_F = 1;
 int Button_State_G = 1;
 int Button_State_H = 1;
 
-//Check to see if button is being held down
-int lastZeroIndex = -1;
-boolean firstZeroDetected = false;  // Initialize to false
-
-int CountDownState = 0;
-int CountDown = 6;
+// Debounce variables
+const unsigned long debounceDelay = 50;  // Adjust this value as needed
+unsigned long lastDebounceTime = 0;
+int lastButtonState = HIGH;
 
 void setup() {
   Serial.begin(115200);
@@ -54,13 +52,28 @@ void setup() {
 void loop() {
   // Get Button state
   int Button_State_A = digitalRead(Button_Pin_A);
+  Button_State_A = debounce(Button_Pin_A, Button_State_A);
+
   int Button_State_B = digitalRead(Button_Pin_B);
+  Button_State_A = debounce(Button_Pin_B, Button_State_B);
+
   int Button_State_C = digitalRead(Button_Pin_C);
+  Button_State_A = debounce(Button_Pin_C, Button_State_C);
+
   int Button_State_D = digitalRead(Button_Pin_D);
+  Button_State_A = debounce(Button_Pin_D, Button_State_D);
+
   int Button_State_E = digitalRead(Button_Pin_E);
+  Button_State_A = debounce(Button_Pin_E, Button_State_E);
+
   int Button_State_F = digitalRead(Button_Pin_F);
+  Button_State_A = debounce(Button_Pin_F, Button_State_F);
+
   int Button_State_G = digitalRead(Button_Pin_G);
+  Button_State_A = debounce(Button_Pin_G, Button_State_G);
+
   int Button_State_H = digitalRead(Button_Pin_H);
+  Button_State_A = debounce(Button_Pin_H, Button_State_H);
 
   // Put State in array
   int Button_State_Array[8];
@@ -72,92 +85,30 @@ void loop() {
   Button_State_Array[6] = Button_State_F;
   Button_State_Array[7] = Button_State_G;
   Button_State_Array[8] = Button_State_H;
+  
+  delay(150);
+  }
 
+  int debounce(int buttonPin, int buttonState) {
+  int reading = digitalRead(buttonPin);
 
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis();
+  }
 
-  // Detect if there is a zero
-  // Iterate through the array to find the first 0
-    for (int i = 0; i < 4; i++) {
-    if (Button_State_Array[i] == 0) {
-
-
-      if (i != lastZeroIndex || !firstZeroDetected) {
-        if (!firstZeroDetected) {
-          firstZeroDetected = true;
-
-        }
-        Serial.print("Button ");
-        Serial.print(i);
-        Serial.println(" Pressed");
-        lastZeroIndex = i;
-
-        // Act on specifc button
-        switch (i) {
-          case 1:
-          Serial.println("You are Happy");
-          leds[currentLED] = CRGB::Yellow;
-          currentLED++;    // Move to the next LED
-          FastLED.show();  // Update the LED strip with the new color
-          break;
-          case 2:
-          Serial.println("You are Sad");
-          leds[currentLED] = CRGB::Blue;
-          currentLED++;    // Move to the next LED
-          FastLED.show();  // Update the LED strip with the new color
-          break;
-          case 3:
-          Serial.println("You are Suprised");
-          leds[currentLED] = CRGB::Green;
-          currentLED++;    // Move to the next LED
-          FastLED.show();  // Update the LED strip with the new color
-          break;
-          };
-
-        //Turn on countdown
-        CountDownState = 1;
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (reading != buttonState) {
+      buttonState = reading;
+      // Handle the button press here...
+      if (buttonState == LOW) {
+        // The button is pressed
+        Serial.print("Button Pressed: ");
+        Serial.println(buttonPin);
+        // Update LEDs or perform other actions as needed
       }
-
-
     }
   }
 
-//countdown
-// Button needs Countdown amount to be reset
-  if(CountDown < 0){
-    CountDownState = 0;
-    CountDown = 6;
-    firstZeroDetected = false;
-  }
-
-  if(CountDownState == 1){
-    CountDown = CountDown - 1;
-  }
-
-
-
-  // Check if no zero was found
-  if (!firstZeroDetected) {
-    // Do nothing
-  }
-
-// LED SStuf
- // if (currentLED < NUM_LEDS) {
-    // Set the current LED to Red, Green, or Blue
-   // if (currentLED % 3 == 0) {
-   //   leds[currentLED] = CRGB::Yellow;
-   // } else if (currentLED % 3 == 1) {
-   //   leds[currentLED] = CRGB::Green;
-   // } else {
-   //   leds[currentLED] = CRGB::Blue;
- //   }
-
-
-   // currentLED++;    // Move to the next LED
- // }
-////////
-
-
-
-
-  delay(150);
-  }
+  lastButtonState = reading;
+  return buttonState;
+}
