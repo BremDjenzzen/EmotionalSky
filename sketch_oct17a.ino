@@ -64,14 +64,14 @@ void loop() {
 
   // Put State in array
   int Button_State_Array[8];
-  Button_State_Array[1] = Button_State_A;
-  Button_State_Array[2] = Button_State_B;
-  Button_State_Array[3] = Button_State_C;
-  Button_State_Array[4] = Button_State_D;
-  Button_State_Array[5] = Button_State_E;
-  Button_State_Array[6] = Button_State_F;
-  Button_State_Array[7] = Button_State_G;
-  Button_State_Array[8] = Button_State_H;
+  Button_State_Array[0] = Button_State_A;
+  Button_State_Array[1] = Button_State_B;
+  Button_State_Array[2] = Button_State_C;
+  Button_State_Array[3] = Button_State_D;
+  Button_State_Array[4] = Button_State_E;
+  Button_State_Array[5] = Button_State_F;
+  Button_State_Array[6] = Button_State_G;
+  Button_State_Array[7] = Button_State_H;
 
 
 
@@ -93,19 +93,19 @@ void loop() {
 
         // Act on specifc button
         switch (i) {
-          case 1:
+          case 0:
           Serial.println("You are Happy");
           leds[currentLED] = CRGB::Yellow;
           currentLED++;    // Move to the next LED
           FastLED.show();  // Update the LED strip with the new color
           break;
-          case 2:
+          case 1:
           Serial.println("You are Sad");
           leds[currentLED] = CRGB::Blue;
           currentLED++;    // Move to the next LED
           FastLED.show();  // Update the LED strip with the new color
           break;
-          case 3:
+          case 2:
           Serial.println("You are Suprised");
           leds[currentLED] = CRGB::Green;
           currentLED++;    // Move to the next LED
@@ -139,24 +139,6 @@ void loop() {
   if (!firstZeroDetected) {
     // Do nothing
   }
-
-// LED SStuf
- // if (currentLED < NUM_LEDS) {
-    // Set the current LED to Red, Green, or Blue
-   // if (currentLED % 3 == 0) {
-   //   leds[currentLED] = CRGB::Yellow;
-   // } else if (currentLED % 3 == 1) {
-   //   leds[currentLED] = CRGB::Green;
-   // } else {
-   //   leds[currentLED] = CRGB::Blue;
- //   }
-
-
-   // currentLED++;    // Move to the next LED
- // }
-////////
-
-
 
 
   delay(150);
