@@ -8,14 +8,15 @@ CRGB leds[NUM_LEDS];  // Create an array to store the LED colors
 int currentLED = 0;  // Track the current LED to update
 
 // Pinout
-const int Button_Pin_A = 2; // Pin for button 1
-const int Button_Pin_B = 3; // Pin for button 2
-const int Button_Pin_C = 4; // Pin for button 3
-const int Button_Pin_D = 5; // Pin for button 4
-const int Button_Pin_E = 6; // Pin for button 5
-const int Button_Pin_F = 7; // Pin for button 6
-const int Button_Pin_G = 8; // Pin for button 7
-const int Button_Pin_H = 9; // Pin for button 8
+// pin for each button
+const int Button_Pin_A = 2;
+const int Button_Pin_B = 3;
+const int Button_Pin_C = 4;
+const int Button_Pin_D = 5;
+const int Button_Pin_E = 6;
+const int Button_Pin_F = 7;
+const int Button_Pin_G = 8;
+const int Button_Pin_H = 9;
 
 // Set Default state
 int Button_State_A = 1;
@@ -29,7 +30,7 @@ int Button_State_H = 1;
 
 //Check to see if button is being held down
 int lastZeroIndex = -1;
-boolean firstZeroDetected = false;  // Initialize to false
+boolean firstZeroDetected = false;  
 
 int CountDownState = 0;
 int CountDown = 6;
@@ -44,11 +45,9 @@ void setup() {
   pinMode(Button_Pin_E, INPUT);
   pinMode(Button_Pin_F, INPUT);
   pinMode(Button_Pin_G, INPUT);
-  pinMode(Button_Pin_H, INPUT);
-
+  pinMode(Button_Pin_H, INPUT);  
   //LED Setup
   FastLED.addLeds<WS2812B, DATA_PIN, GRB>(leds, NUM_LEDS);  // Initialize the LED strip
-
 }
  
 void loop() {
@@ -73,14 +72,10 @@ void loop() {
   Button_State_Array[6] = Button_State_G;
   Button_State_Array[7] = Button_State_H;
 
-
-
   // Detect if there is a zero
   // Iterate through the array to find the first 0
-    for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 4; i++) {
     if (Button_State_Array[i] == 0) {
-
-
       if (i != lastZeroIndex || !firstZeroDetected) {
         if (!firstZeroDetected) {
           firstZeroDetected = true;
@@ -99,25 +94,25 @@ void loop() {
           currentLED++;    // Move to the next LED
           FastLED.show();  // Update the LED strip with the new color
           break;
+
           case 1:
           Serial.println("You are Sad");
           leds[currentLED] = CRGB::Blue;
-          currentLED++;    // Move to the next LED
-          FastLED.show();  // Update the LED strip with the new color
+          currentLED++;    
+          FastLED.show();  
           break;
+
           case 2:
           Serial.println("You are Suprised");
           leds[currentLED] = CRGB::Green;
-          currentLED++;    // Move to the next LED
-          FastLED.show();  // Update the LED strip with the new color
+          currentLED++;    
+          FastLED.show();  
           break;
           };
 
         //Turn on countdown
         CountDownState = 1;
       }
-
-
     }
   }
 
@@ -132,14 +127,11 @@ void loop() {
   if(CountDownState == 1){
     CountDown = CountDown - 1;
   }
-
-
-
+  
   // Check if no zero was found
   if (!firstZeroDetected) {
     // Do nothing
   }
 
-
   delay(150);
-  }
+}
